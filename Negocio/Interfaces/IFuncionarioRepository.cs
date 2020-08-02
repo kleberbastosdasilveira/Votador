@@ -8,8 +8,8 @@ namespace Business.Interfaces
 {
     public interface IFuncionarioRepository : IRepository<Funcionario>
     {
-        Task<Funcionario> ObterFuncionario(Guid Id);
+        Task<Funcionario> ObterFuncionario(Guid id);
         Task<IEnumerable<Funcionario>> ObterFuncionarios();
-        Task<IEnumerable<Funcionario>> ObterVotoPorFuncionario(Guid id);
+        Task<Funcionario> ObterFuncionarioLogado(string email, string senha);
     }
 }

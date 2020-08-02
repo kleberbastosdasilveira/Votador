@@ -2,7 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using Business.Interfaces;
 using Date.Context;
+using Date.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -26,8 +29,11 @@ namespace VotadorWeb
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddDbContext<MeuDbContext>(options =>
-             options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<MeuDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddScoped<IFuncionarioRepository, FuncionarioRepository>();
+            services.AddScoped<IRecursoRepository, RecursoRepository>();
+            services.AddScoped<IRegistroVotacaoRepository, IRegistroVotacaoRepository>();
+            services.AddAutoMapper(typeof(Startup));
 
         }
 

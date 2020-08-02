@@ -14,19 +14,37 @@ namespace Date.Repository
     {
         public RegistroVotacaoRepository(MeuDbContext context) : base(context) { }
 
+        public async Task<RegistroVotacao> ObterVotacao(Guid funcionarioId, Guid recursoId)
+        {
+            return await(from r in Db.RegistroVotacoes.AsNoTracking()
+                         join rc in Db.Recursos.AsNoTracking() on r.RecursoId equals rc.Id
+                         join f in Db.Funcionarios.AsNoTracking() on r.FuncionarioId equals f.Id
+                         where r.FuncionarioId == funcionarioId && r.RecursoId == recursoId
+                         select r).OrderByDescending(r => r.DataVotacaoRecurso).FirstOrDefaultAsync();
+        }
+
         public async Task<IEnumerable<RegistroVotacao>> ObterVotacaoPorFuncionario(Guid funcionarioId)
         {
-            return await Db.RegistroVotacoes.AsNoTracking().Include(f => f.Funcionario).OrderBy(r => r.DataVotacaoRecurso).ToListAsync();
+            return await (from r in Db.RegistroVotacoes.AsNoTracking()
+                          join f in Db.Funcionarios.AsNoTracking() on r.FuncionarioId equals f.Id
+                          where r.FuncionarioId == funcionarioId
+                          select r).ToListAsync();
         }
 
         public async Task<IEnumerable<RegistroVotacao>> ObterVotacaoPorRecurso(Guid recursoId)
         {
-            return await Db.RegistroVotacoes.AsNoTracking().Include(f => f.Recurso).OrderBy(r => r.DataVotacaoRecurso).ToListAsync();
+            return await (from r in Db.RegistroVotacoes.AsNoTracking()
+                          join rc in Db.Recursos.AsNoTracking() on r.RecursoId equals rc.Id
+                          where r.RecursoId == recursoId
+                          select r).ToListAsync();
         }
 
         public async Task<IEnumerable<RegistroVotacao>> ObterVotacaoPorRecursoEFuncionario()
         {
-            return await Db.RegistroVotacoes.AsNoTracking().Include(f => f.Funcionario).Include(r => r.Recurso).ToListAsync();
+            return await (from r in Db.RegistroVotacoes.AsNoTracking()
+                          join rc in Db.Recursos.AsNoTracking() on r.RecursoId equals rc.Id
+                          join f in Db.Funcionarios.AsNoTracking() on r.FuncionarioId equals f.Id
+                          select r).OrderByDescending(r=>r.DataVotacaoRecurso).ToListAsync();
         }
     }
 }

@@ -1,6 +1,6 @@
 using System;
 
-namespace VotadorWeb.Models
+namespace VotadorWeb.ViewModels
 {
     public class ErrorViewModel
     {

@@ -1,7 +1,9 @@
 ﻿using Business.Interfaces;
 using Business.Models;
 using Date.Context;
+using Date.Security;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,9 +16,18 @@ namespace Date.Repository
     {
         public FuncionarioRepository(MeuDbContext context) : base(context){}
 
-        public async Task<Funcionario> ObterFuncionario(Guid Id)
+        public async Task<Funcionario> ObterFuncionario(Guid id)
         {
-            return await Db.Funcionarios.AsNoTracking().FirstOrDefaultAsync(f => f.Id == Id);
+            return await Db.Funcionarios.AsNoTracking().FirstOrDefaultAsync(f => f.Id == id);
+        }
+
+        public async Task<Funcionario> ObterFuncionarioLogado(string email, string senha)
+        {
+            var usuario = await Db.Funcionarios.AsNoTracking().FirstOrDefaultAsync(f => f.Email == email && f.Senha == new Cryptography().DecryptCardData(senha));
+            if (usuario != null)
+                return usuario;
+            else
+                return null;
         }
 
         public async Task<IEnumerable<Funcionario>> ObterFuncionarios()
@@ -24,9 +35,5 @@ namespace Date.Repository
             return await Db.Funcionarios.AsNoTracking().OrderBy(f=>f.Nome).ToListAsync();
         }
 
-        public async Task<IEnumerable<Funcionario>> ObterVotoPorFuncionario(Guid id)
-        {
-            return await Db.Funcionarios.AsNoTracking().Include(r => r.RegistroVotacoes).ToListAsync();
-        }
     }
 }
