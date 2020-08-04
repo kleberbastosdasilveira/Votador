@@ -38,7 +38,7 @@
                     @Html.DisplayFor(modelItem => item.NumeroVotacao)
                 </td>
                 <td class="text-right">
-                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    <a class="btn btn-warning" supress-by-claim-name="Recurso" supress-by-claim-value="Editar" asp-action="Editar" asp-route-id="@item.Id"><spam class="fa fa-pencil-alt"></spam></a>
                     @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
                     @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
                 </td>

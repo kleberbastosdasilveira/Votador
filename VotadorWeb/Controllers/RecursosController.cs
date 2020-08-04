@@ -16,9 +16,9 @@ namespace VotadorWeb.Controllers
     {
         private readonly IRecursoRepository _recursoRepository;
         private readonly IMapper _mapper;
-        public RecursosController(IRecursoRepository recursoRepository,IMapper mapper)
+        public RecursosController(IRecursoRepository recursoRepository, IMapper mapper)
         {
-            _recursoRepository = recursoRepository;  _mapper = mapper;
+            _recursoRepository = recursoRepository; _mapper = mapper;
         }
 
         public async Task<IActionResult> Index()
@@ -29,8 +29,8 @@ namespace VotadorWeb.Controllers
         public async Task<ActionResult> Details(Guid id)
         {
             var recursoViewModel = await ObterRecursoPorId(id);
-            if(recursoViewModel == null)
-            return NotFound();
+            if (recursoViewModel == null)
+                return NotFound();
 
             return View(recursoViewModel);
         }
@@ -57,22 +57,31 @@ namespace VotadorWeb.Controllers
             }
         }
 
-        public ActionResult Edit(int id)
+        public async Task<IActionResult> Editar(Guid id)
         {
-            return View();
+            var recursoViewModel = await ObterRecursoPorId(id);
+            if (recursoViewModel == null)
+                return NotFound();
+
+            return View(recursoViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Editar(Guid id, RecursoViewModel recursoViewModel)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                if (id != recursoViewModel.Id) return NotFound();
+                if (!ModelState.IsValid) return NotFound();
+                var recurso = _mapper.Map<Recurso>(recursoViewModel);
+                await _recursoRepository.Atualizar(recurso);
+
+                return View(await ObterRecursoPorId(id));
             }
             catch
             {
-                return View();
+                return NotFound();
             }
         }
 
@@ -94,7 +103,7 @@ namespace VotadorWeb.Controllers
                 return View();
             }
         }
-        private async Task<RecursoViewModel>ObterRecursoPorId(Guid id) 
+        private async Task<RecursoViewModel> ObterRecursoPorId(Guid id)
         {
             return _mapper.Map<RecursoViewModel>(await _recursoRepository.ObterRecurso(id));
         }
