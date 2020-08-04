@@ -12,9 +12,9 @@ namespace VotadorWeb.AutoMapper
     {
         public AutoMapperConfig()
         {
-            CreateMap<Funcionario, FuncionarioViewModel>();
-            CreateMap<Recurso, RecursoViewModel>();
-            CreateMap<RegistroVotacao, RegistroVotacaoViewModel>();
+            CreateMap<Funcionario, FuncionarioViewModel>().ReverseMap();
+            CreateMap<Recurso, RecursoViewModel>().ReverseMap();
+            CreateMap<RegistroVotacao, RegistroVotacaoViewModel>().ReverseMap();
         }
     }
 }

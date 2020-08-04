@@ -7,18 +7,14 @@ namespace Date.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.EnsureSchema(
-                name: "dbo");
-
             migrationBuilder.CreateTable(
                 name: "Funcionarios",
-                schema: "dbo",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     Nome = table.Column<string>(type: "varchar(200)", nullable: false),
                     Email = table.Column<string>(type: "varchar(50)", nullable: false),
-                    Senha = table.Column<string>(type: "Passord", nullable: true)
+                    Senha = table.Column<string>(type: "varchar(50)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -27,7 +23,6 @@ namespace Date.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Recursos",
-                schema: "dbo",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -42,7 +37,6 @@ namespace Date.Migrations
 
             migrationBuilder.CreateTable(
                 name: "RegistroVotacoes",
-                schema: "dbo",
                 columns: table => new
                 {
                     FuncionarioId = table.Column<Guid>(nullable: false),
@@ -56,14 +50,12 @@ namespace Date.Migrations
                     table.ForeignKey(
                         name: "FK_RegistroVotacoes_Funcionarios_FuncionarioId",
                         column: x => x.FuncionarioId,
-                        principalSchema: "dbo",
                         principalTable: "Funcionarios",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_RegistroVotacoes_Recursos_RecursoId",
                         column: x => x.RecursoId,
-                        principalSchema: "dbo",
                         principalTable: "Recursos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -71,7 +63,6 @@ namespace Date.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_RegistroVotacoes_RecursoId",
-                schema: "dbo",
                 table: "RegistroVotacoes",
                 column: "RecursoId");
         }
@@ -79,16 +70,13 @@ namespace Date.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "RegistroVotacoes",
-                schema: "dbo");
+                name: "RegistroVotacoes");
 
             migrationBuilder.DropTable(
-                name: "Funcionarios",
-                schema: "dbo");
+                name: "Funcionarios");
 
             migrationBuilder.DropTable(
-                name: "Recursos",
-                schema: "dbo");
+                name: "Recursos");
         }
     }
 }

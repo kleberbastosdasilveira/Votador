@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Business.Models
 {
-	public class RegistroVotacao 
+	public class RegistroVotacao
 	{
 		public Guid FuncionarioId { get; set; }
 		public Funcionario Funcionario { get; set; }

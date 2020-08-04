@@ -11,6 +11,5 @@ namespace Business.Interfaces
         Task<RegistroVotacao> ObterVotacao(Guid funcionarioId, Guid recursoId);
         Task<IEnumerable<RegistroVotacao>> ObterVotacaoPorFuncionario(Guid funcionarioId);
         Task<IEnumerable<RegistroVotacao>> ObterVotacaoPorRecurso(Guid recursoId);
-        Task<IEnumerable<RegistroVotacao>> ObterVotacaoPorRecursoEFuncionario();
     }
 }

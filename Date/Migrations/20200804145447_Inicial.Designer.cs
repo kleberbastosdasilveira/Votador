@@ -10,16 +10,15 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Date.Migrations
 {
     [DbContext(typeof(MeuDbContext))]
-    [Migration("20200731105739_Inicial")]
+    [Migration("20200804145447_Inicial")]
     partial class Inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("dbo")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
-                .HasAnnotation("ProductVersion", "3.1.0")
+                .HasAnnotation("ProductVersion", "3.1.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("Business.Models.Funcionario", b =>
@@ -37,7 +36,7 @@ namespace Date.Migrations
                         .HasColumnType("varchar(200)");
 
                     b.Property<string>("Senha")
-                        .HasColumnType("Passord");
+                        .HasColumnType("varchar(50)");
 
                     b.HasKey("Id");
 

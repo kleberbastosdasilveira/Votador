@@ -10,17 +10,17 @@ using System.Threading.Tasks;
 
 namespace Date.Repository
 {
-    partial class RegistroVotacaoRepository : Repository<RegistroVotacao>, IRegistroVotacaoRepository
+    public class RegistroVotacaoRepository : Repository<RegistroVotacao>, IRegistroVotacaoRepository
     {
         public RegistroVotacaoRepository(MeuDbContext context) : base(context) { }
 
         public async Task<RegistroVotacao> ObterVotacao(Guid funcionarioId, Guid recursoId)
         {
-            return await(from r in Db.RegistroVotacoes.AsNoTracking()
-                         join rc in Db.Recursos.AsNoTracking() on r.RecursoId equals rc.Id
-                         join f in Db.Funcionarios.AsNoTracking() on r.FuncionarioId equals f.Id
-                         where r.FuncionarioId == funcionarioId && r.RecursoId == recursoId
-                         select r).OrderByDescending(r => r.DataVotacaoRecurso).FirstOrDefaultAsync();
+            return await (from r in Db.RegistroVotacoes.AsNoTracking()
+                          join rc in Db.Recursos.AsNoTracking() on r.RecursoId equals rc.Id
+                          join f in Db.Funcionarios.AsNoTracking() on r.FuncionarioId equals f.Id
+                          where r.FuncionarioId == funcionarioId && r.RecursoId == recursoId
+                          select r).OrderByDescending(r => r.DataVotacaoRecurso).FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<RegistroVotacao>> ObterVotacaoPorFuncionario(Guid funcionarioId)
@@ -39,12 +39,5 @@ namespace Date.Repository
                           select r).ToListAsync();
         }
 
-        public async Task<IEnumerable<RegistroVotacao>> ObterVotacaoPorRecursoEFuncionario()
-        {
-            return await (from r in Db.RegistroVotacoes.AsNoTracking()
-                          join rc in Db.Recursos.AsNoTracking() on r.RecursoId equals rc.Id
-                          join f in Db.Funcionarios.AsNoTracking() on r.FuncionarioId equals f.Id
-                          select r).OrderByDescending(r=>r.DataVotacaoRecurso).ToListAsync();
-        }
     }
 }

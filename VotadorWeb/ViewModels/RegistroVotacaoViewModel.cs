@@ -24,6 +24,7 @@ namespace VotadorWeb.ViewModels
 		[StringLength(999, ErrorMessage = "O campo {0} precisa ter entre {2} e {1} caracteres", MinimumLength = 5)]
 		public string ComentarioRecurso { get; set; }
 
+		[ScaffoldColumn(false)]
 		[DisplayName("Data da Votação")]
 		public DateTime DataVotacaoRecurso { get; set; }
 	}
