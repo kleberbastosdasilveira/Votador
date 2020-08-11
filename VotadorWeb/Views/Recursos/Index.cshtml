@@ -9,40 +9,50 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table table-hover">
-    <thead class="thead-dark">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.TituloRecurso)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DescricaoRecurso)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NumeroVotacao)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TituloRecurso)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DescricaoRecurso)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.NumeroVotacao)
-                </td>
-                <td class="text-right">
-                    <a class="btn btn-warning" supress-by-claim-name="Recurso" supress-by-claim-value="Editar" asp-action="Editar" asp-route-id="@item.Id"><spam class="fa fa-pencil-alt"></spam></a>
-                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+
+            <table class="table table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th colspan="1">
+                            @Html.DisplayNameFor(model => model.TituloRecurso)
+                        </th>
+                        <th colspan="6">
+                            @Html.DisplayNameFor(model => model.DescricaoRecurso)
+                        </th>
+                        <th class="text-center">
+                            @Html.DisplayNameFor(model => model.NumeroVotacao)
+                        </th>
+                       
+                    </tr>
+                </thead>
+                <tbody class="table-striped">
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td colspan="1">
+                                <a class="btn" supress-by-claim-name="Recurso" supress-by-claim-value="Editar" asp-action="Editar" asp-route-id="@item.Id"> @Html.DisplayFor(modelItem => item.TituloRecurso)</a>
+                            </td>
+                            <td colspan="6">
+                                <a class="btn" supress-by-claim-name="Recurso" supress-by-claim-value="Editar" asp-action="Editar" asp-route-id="@item.Id"> @Html.DisplayFor(modelItem => item.DescricaoRecurso)</a>
+                            </td>
+                            <td class="text-center">
+                                <a class="btn" supress-by-claim-name="Recurso" supress-by-claim-value="Editar" asp-action="Editar" asp-route-id="@item.Id">  @Html.DisplayFor(modelItem => item.NumeroVotacao)</a>
+                            </td>
+                            <td class="text-right">
+                                <a class="btn btn-warning" supress-by-claim-name="Recurso" supress-by-claim-value="Details" asp-action="Details" asp-route-id="@item.Id"><spam class="fa fa-pencil-alt"></spam></a>
+                                @*@Html.ActionLink("Details", "Details", new {  id=item  }) |*@
+                                    @*@Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+                            </td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>

@@ -11,91 +11,96 @@ using VotadorWeb.ViewModels;
 
 namespace VotadorWeb.Controllers
 {
-
-    public class RecursosController : BaseController
+    public class RegistroVotacoesController : BaseController
     {
+        private readonly IRegistroVotacaoRepository _registroVotacaoRepository;
         private readonly IRecursoRepository _recursoRepository;
         private readonly IMapper _mapper;
-        public RecursosController(IRecursoRepository recursoRepository, IMapper mapper)
+
+        public RegistroVotacoesController(IRegistroVotacaoRepository registroVotacaoRepository,IRecursoRepository recursoRepository ,IMapper mapper)
         {
-            _recursoRepository = recursoRepository; _mapper = mapper;
+            _mapper = mapper; _registroVotacaoRepository = registroVotacaoRepository; _recursoRepository = recursoRepository;
         }
 
-        public async Task<IActionResult> Index()
-        {
-            return View(_mapper.Map<IEnumerable<RecursoViewModel>>(await _recursoRepository.ObterTodosVotos()));
-        }
-
-        public async Task<ActionResult> Details(Guid id)
-        {
-            var recursoViewModel = await ObterRecursoPorId(id);
-            if (recursoViewModel == null)
-                return NotFound();
-
-            return View(recursoViewModel);
-        }
-
-        public ActionResult Create()
+        // GET: RegistroVotacoes
+        public ActionResult Index()
         {
             return View();
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(RecursoViewModel recursoViewModel)
+        // GET: RegistroVotacoes/Details/5
+        public ActionResult Details(int id)
         {
-            try
-            {
-                if (!ModelState.IsValid) return View(recursoViewModel);
-                var recurso = _mapper.Map<Recurso>(recursoViewModel);
-                await _recursoRepository.Adicionar(recurso);
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return NotFound();
-            }
+            return View();
         }
 
-        public async Task<IActionResult> Editar(Guid id)
+        // GET: RegistroVotacoes/Create
+        public async Task<IActionResult> Create(Guid id)
         {
             var recursoViewModel = await ObterRecursoPorId(id);
             if (recursoViewModel == null)
                 return NotFound();
 
-            return View(recursoViewModel);
+            return View();
         }
 
+        // POST: RegistroVotacoes/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Editar(Guid id, RecursoViewModel recursoViewModel)
+        public async Task<IActionResult> Create(RegistroVotacaoViewModel registroVotacaoViewModel)
         {
             try
-            {
-                if (id != recursoViewModel.Id) return NotFound();
+            {   
                 if (!ModelState.IsValid) return NotFound();
-                var recurso = _mapper.Map<Recurso>(recursoViewModel);
-                await _recursoRepository.Atualizar(recurso);
+                var registro = _mapper.Map<RegistroVotacao>(registroVotacaoViewModel);
+                await _registroVotacaoRepository.Adicionar(registro);
 
-                return RedirectToAction("Index");
+                return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return NotFound();
+                return View();
             }
         }
 
+        // GET: RegistroVotacoes/Edit/5
+        public ActionResult Edit(int id)
+        {
+            return View();
+        }
+
+        // POST: RegistroVotacoes/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(int id, IFormCollection collection)
+        {
+            try
+            {
+                // TODO: Add update logic here
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        // GET: RegistroVotacoes/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
+        // POST: RegistroVotacoes/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
         {
             try
             {
+                // TODO: Add delete logic here
+
                 return RedirectToAction(nameof(Index));
             }
             catch
