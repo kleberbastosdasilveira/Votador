@@ -1,18 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
-using Business.Interfaces;
 using Date.Context;
-using Date.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using VotadorWeb.Areas.Identity.Data;
 using VotadorWeb.Configurations;
 
 namespace VotadorWeb
@@ -28,10 +23,11 @@ namespace VotadorWeb
 
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<VotadorWebContext>();
+            services.AddDbContext<VotadorWebContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDbContext<MeuDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
             services.ResolveDependencies();
-
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -47,7 +43,7 @@ namespace VotadorWeb
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseAuthentication();
             app.UseRouting();
 
             app.UseAuthorization();
