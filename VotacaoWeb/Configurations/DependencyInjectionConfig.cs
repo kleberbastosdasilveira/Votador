@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Business.Interfaces;
 using Business.Interfaces.IService;
+using Business.Notificacoes;
 using Business.Services;
 using Date.Context;
 using Date.Repository;
@@ -21,7 +22,7 @@ namespace VotacaoWeb.Configurations
             services.AddScoped<IRegistroVotacaoRepository, RegistroVotacaoRepository>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            services.AddScoped<INotificador, INotificador>();
+            services.AddScoped<INotificador, Notificador>();
             services.AddScoped<IRegistroVotacaoService, RegistroVotacaoService>();
             services.AddScoped<IRecursoService, RecursoService>();
 

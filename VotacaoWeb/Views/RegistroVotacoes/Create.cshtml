@@ -1,30 +1,30 @@
 ﻿@model VotacaoWeb.ViewModels.RegistroVotacaoViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Votar no Registro";
 }
 
-<h1>Create</h1>
+    <h1>@ViewData["Title"]</h1>
 
-<h4>RegistroVotacaoViewModel</h4>
+    <h4>@ViewData["nomerecuso"]</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-12">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
+            <div class="form-group col-md-12">
                 <input type="hidden" asp-for="@ViewData["registro"]" asp-format="Id" />
                 <label asp-for="ComentarioRecurso" class="control-label"></label>
-                <input asp-for="ComentarioRecurso" class="form-control" />
+                <textarea rows="15" asp-for="ComentarioRecurso" class="form-control" placeholder="Descrição do Voto"></textarea>
                 <span asp-validation-for="ComentarioRecurso" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <a class="btn btn-info" href="/lista-de-recursos" title="Voltar">Voltar <i class="fa fa-reply" aria-hidden="true"></i></a>
+                <button type="submit" class="btn btn-info">Votar Recurso <i class="fas fa-save"></i></button>
             </div>
         </form>
     </div>
 </div>
-
 <div>
     <a asp-action="Index">Back to List</a>
 </div>

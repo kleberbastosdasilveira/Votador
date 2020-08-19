@@ -39,5 +39,9 @@ namespace Date.Repository
                           select r).ToListAsync();
         }
 
+        public async Task<RegistroVotacao> ObterVotoPorFuncionario(Guid funcionarioId, Guid recursoId)
+        {
+            return await Db.RegistroVotacoes.AsNoTracking().FirstOrDefaultAsync(r => r.FuncionarioId == funcionarioId && r.RecursoId == recursoId);
+        }
     }
 }

@@ -1,12 +1,11 @@
 ﻿@model VotadorWeb.ViewModels.RecursoViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Criação de Recurso";
 }
 
-<h1>Create</h1>
+    <h1 style="padding-top: 50px">@ViewData["Title"]</h1>
 
-<h4>RecursoViewModel</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -14,7 +13,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="TituloRecurso" class="control-label"></label>
-                <input asp-for="TituloRecurso" class="form-control" />
+                <textarea cols="40" rows="5" asp-for="TituloRecurso" class="form-control"></textarea>/>
                 <span asp-validation-for="TituloRecurso" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -27,11 +26,12 @@
             </div>
         </form>
     </div>
+    <div>
+        <a class="btn btn-info" asp-action="Index">Salvar Recurso</a>
+    </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

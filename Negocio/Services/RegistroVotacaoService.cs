@@ -34,24 +34,20 @@ namespace Business.Services
             if (!ExecultarValidacao(new RegistroVotacaoValidation(), registroVotacao)) return;
             var useridentitylogado = _httpContextAccessor.HttpContext.User.Identity.Name.ToString();
             var usuariologado = await _funcionarioRepository.ObterFuncionarioLogado(useridentitylogado);
-            var recurso = await _recursoRepository.ObterPorId(registroVotacao.RecursoId);
-            if (_registroVotacaoRepository.ObterVotacao(usuariologado.Id, recurso.Id).Result.Funcionario.Nome.Any())
-            {
-                Notificar("Usuário já realizou votação nesse recurso.");
-                return;
-            }
             if (usuariologado == null)
             {
                 Notificar("Usuário não encontrato.");
                 return;
             }
-            var atualizarecurso = new Recurso
+            var recurso = await _recursoRepository.ObterPorId(registroVotacao.RecursoId);
+            var votaçaofuncionario = _registroVotacaoRepository.ObterVotoPorFuncionario(usuariologado.Id, recurso.Id).Result;
+            if (votaçaofuncionario != null)
             {
-                Id = recurso.Id,
-                DescricaoRecurso = recurso.DescricaoRecurso,
-                NumeroVotacao = recurso.NumeroVotacao + 1,
-                TituloRecurso = recurso.TituloRecurso
-            };
+                Notificar("Usuário já realizou votação nesse recurso.");
+                return;
+            }
+
+            recurso.NumeroVotacao = recurso.NumeroVotacao + 1;
             var registro = new RegistroVotacao
             {
                 RecursoId = registroVotacao.RecursoId,
@@ -60,7 +56,7 @@ namespace Business.Services
                 FuncionarioId = usuariologado.Id,
             };
             await _registroVotacaoRepository.Adicionar(registro);
-            await _recursoRepository.Atualizar(atualizarecurso);
+            await _recursoRepository.Atualizar(recurso);
         }
 
         public void Dispose()

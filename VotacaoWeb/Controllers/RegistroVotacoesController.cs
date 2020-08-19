@@ -15,16 +15,18 @@ namespace VotacaoWeb.Controllers
         private readonly IRegistroVotacaoRepository _registroVotacaoRepository;
         private readonly IMapper _mapper;
         private readonly IRegistroVotacaoService _registroVotacaoService;
+        private readonly IRecursoRepository _recursoRepository;
 
         public RegistroVotacoesController(
             IRegistroVotacaoRepository registroVotacaoRepository,
             IMapper mapper,
-            IHttpContextAccessor httpContextAccessor,
-            IRegistroVotacaoService registroVotacaoService)
+            IRegistroVotacaoService registroVotacaoService,
+            IRecursoRepository recursoRepository)
         {
             _mapper = mapper;
             _registroVotacaoRepository = registroVotacaoRepository;
             _registroVotacaoService = registroVotacaoService;
+            _recursoRepository = recursoRepository;
         }
 
         // GET: RegistroVotacoes
@@ -42,11 +44,12 @@ namespace VotacaoWeb.Controllers
         // GET: RegistroVotacoes/Create
         public async Task<IActionResult> Create(Guid id)
         {
+            var recursoViewModel = await ObterRecursoPorId(id);
+            ViewData["nomerecuso"] = recursoViewModel.TituloRecurso;
             ViewData["registro"] = id;
             return View();
         }
 
-        // POST: RegistroVotacoes/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(Guid id, RegistroVotacaoViewModel registroVotacaoViewModel)
@@ -56,7 +59,7 @@ namespace VotacaoWeb.Controllers
                 var registro = new RegistroVotacaoViewModel { RecursoId = id, ComentarioRecurso = registroVotacaoViewModel.ComentarioRecurso };
                 var recurso = _mapper.Map<RegistroVotacao>(registro);
                 await _registroVotacaoService.Adicionar(recurso);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Recursos");
             }
             catch
             {
@@ -108,6 +111,11 @@ namespace VotacaoWeb.Controllers
             {
                 return View();
             }
+        }
+
+        private async Task<RecursoViewModel> ObterRecursoPorId(Guid id)
+        {
+            return _mapper.Map<RecursoViewModel>(await _recursoRepository.ObterRecurso(id));
         }
     }
 }

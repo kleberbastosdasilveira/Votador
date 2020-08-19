@@ -20,6 +20,7 @@ namespace VotacaoWeb.Controllers
             _recursoRepository = recursoRepository; _mapper = mapper;
         }
 
+        [Route("lista-de-recursos")]
         public async Task<IActionResult> Index()
         {
             return View(_mapper.Map<IEnumerable<RecursoViewModel>>(await _recursoRepository.ObterTodosVotos()));
