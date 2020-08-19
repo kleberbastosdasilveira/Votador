@@ -10,6 +10,6 @@ namespace Business.Interfaces
     {
         Task<Funcionario> ObterFuncionario(Guid id);
         Task<IEnumerable<Funcionario>> ObterFuncionarios();
-        Task<Funcionario> ObterFuncionarioLogado(string email, string senha);
+        Task<Funcionario> ObterFuncionarioLogado(string email);
     }
 }

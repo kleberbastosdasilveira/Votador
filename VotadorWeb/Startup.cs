@@ -1,14 +1,13 @@
 using Date.Context;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using VotadorWeb.Areas.Identity.Data;
 using VotadorWeb.Configurations;
+using VotadorWeb.ViewModels;
 
 namespace VotadorWeb
 {
@@ -23,7 +22,7 @@ namespace VotadorWeb
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<VotadorWebContext>();
             services.AddDbContext<VotadorWebContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDbContext<MeuDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
@@ -43,10 +42,12 @@ namespace VotadorWeb
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseAuthentication();
+
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
+
             app.UseGlobalizationConfig();
             app.UseEndpoints(endpoints =>
             {
