@@ -4,7 +4,6 @@ using Business.Models;
 using Business.Models.Validations;
 using Microsoft.AspNetCore.Http;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Business.Services
@@ -32,16 +31,17 @@ namespace Business.Services
         public async Task Adicionar(RegistroVotacao registroVotacao)
         {
             if (!ExecultarValidacao(new RegistroVotacaoValidation(), registroVotacao)) return;
-            var useridentitylogado = _httpContextAccessor.HttpContext.User.Identity.Name.ToString();
-            var usuariologado = await _funcionarioRepository.ObterFuncionarioLogado(useridentitylogado);
-            if (usuariologado == null)
-            {
-                Notificar("Usuário não encontrato.");
-                return;
-            }
+            //var useridentitylogado = _httpContextAccessor.HttpContext.User.Identity.Name.ToString();
+            //var usuariologado = await _funcionarioRepository.ObterFuncionarioLogado(useridentitylogado);
+            //if (usuariologado == null)
+            //{
+            //    Notificar("Usuário não encontrato.");
+            //    return;
+            //}
+            var usuario = await Obterfuncionariologado();
             var recurso = await _recursoRepository.ObterPorId(registroVotacao.RecursoId);
-            var votaçaofuncionario = _registroVotacaoRepository.ObterVotoPorFuncionario(usuariologado.Id, recurso.Id).Result;
-            if (votaçaofuncionario != null)
+            //var votaçaofuncionario = _registroVotacaoRepository.ObterVotoPorFuncionario(usuario.Id, recurso.Id).Result;
+            if (VerificarUsuarioVoto(usuario.Id,recurso.Id))
             {
                 Notificar("Usuário já realizou votação nesse recurso.");
                 return;
@@ -53,7 +53,7 @@ namespace Business.Services
                 RecursoId = registroVotacao.RecursoId,
                 ComentarioRecurso = registroVotacao.ComentarioRecurso,
                 DataVotacaoRecurso = DateTime.Now,
-                FuncionarioId = usuariologado.Id,
+                FuncionarioId = usuario.Id,
             };
             await _registroVotacaoRepository.Adicionar(registro);
             await _recursoRepository.Atualizar(recurso);
@@ -64,6 +64,26 @@ namespace Business.Services
             _registroVotacaoRepository?.Dispose();
             _funcionarioRepository?.Dispose();
             _recursoRepository?.Dispose();
+        }
+        private async Task<Funcionario> Obterfuncionariologado ()
+        {
+            var useridentitylogado = _httpContextAccessor.HttpContext.User.Identity.Name.ToString();
+            var usuariologado = await _funcionarioRepository.ObterFuncionarioLogado(useridentitylogado);
+            if (usuariologado == null)
+            {
+                Notificar("Usuário não encontrato.");
+                return null;
+            }
+            return usuariologado;
+        }
+        private  bool  VerificarUsuarioVoto(Guid funcionario , Guid recurso)
+        {
+            var votaçaofuncionario =  _registroVotacaoRepository.ObterVotoPorFuncionario(funcionario, recurso).Result;
+            if (votaçaofuncionario != null)
+            {
+                return true;
+            } 
+            return false;
         }
     }
 }

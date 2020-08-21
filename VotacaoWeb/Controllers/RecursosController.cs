@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Business.Interfaces;
 using Business.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using VotacaoWeb.ViewModels;
+using X.PagedList;
 
 namespace VotacaoWeb.Controllers
 {
@@ -15,15 +15,18 @@ namespace VotacaoWeb.Controllers
     {
         private readonly IRecursoRepository _recursoRepository;
         private readonly IMapper _mapper;
+
         public RecursosController(IRecursoRepository recursoRepository, IMapper mapper)
         {
             _recursoRepository = recursoRepository; _mapper = mapper;
         }
 
         [Route("lista-de-recursos")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? pg)
         {
-            return View(_mapper.Map<IEnumerable<RecursoViewModel>>(await _recursoRepository.ObterTodosVotos()));
+            int paginaAtual = pg ?? 1;
+            var query = _mapper.Map<IEnumerable<RecursoViewModel>>(await _recursoRepository.ObterTodosVotos()).ToPagedList(paginaAtual, 3);
+            return View(query);
         }
 
         public async Task<ActionResult> Details(Guid id)
@@ -103,6 +106,7 @@ namespace VotacaoWeb.Controllers
                 return View();
             }
         }
+
         private async Task<RecursoViewModel> ObterRecursoPorId(Guid id)
         {
             return _mapper.Map<RecursoViewModel>(await _recursoRepository.ObterRecurso(id));

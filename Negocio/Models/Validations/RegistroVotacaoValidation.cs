@@ -8,7 +8,7 @@ namespace Business.Models.Validations
         {
             RuleFor(r => r.ComentarioRecurso)
                         .NotEmpty().WithMessage("O campo {PropertyName} precisa ser fornecido")
-                        .Length(2, 200)
+                        .Length(2, 999)
                         .WithMessage("O campo {PropertyName} precisa ter entre {MinLength} e {MaxLength} caracteres");
         }
     }

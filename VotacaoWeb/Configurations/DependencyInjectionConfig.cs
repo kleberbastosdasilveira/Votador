@@ -25,7 +25,7 @@ namespace VotacaoWeb.Configurations
             services.AddScoped<INotificador, Notificador>();
             services.AddScoped<IRegistroVotacaoService, RegistroVotacaoService>();
             services.AddScoped<IRecursoService, RecursoService>();
-
+            
             services.AddAutoMapper(typeof(Startup));
             return services;
         }

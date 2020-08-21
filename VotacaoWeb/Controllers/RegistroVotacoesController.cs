@@ -40,7 +40,6 @@ namespace VotacaoWeb.Controllers
         {
             return View();
         }
-
         // GET: RegistroVotacoes/Create
         public async Task<IActionResult> Create(Guid id)
         {

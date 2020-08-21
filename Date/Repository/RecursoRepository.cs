@@ -23,5 +23,6 @@ namespace Date.Repository
         {
             return await Db.Recursos.AsNoTracking().OrderByDescending(r => r.NumeroVotacao).ToListAsync();
         }
+
     }
 }
