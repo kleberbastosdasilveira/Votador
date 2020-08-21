@@ -31,16 +31,8 @@ namespace Business.Services
         public async Task Adicionar(RegistroVotacao registroVotacao)
         {
             if (!ExecultarValidacao(new RegistroVotacaoValidation(), registroVotacao)) return;
-            //var useridentitylogado = _httpContextAccessor.HttpContext.User.Identity.Name.ToString();
-            //var usuariologado = await _funcionarioRepository.ObterFuncionarioLogado(useridentitylogado);
-            //if (usuariologado == null)
-            //{
-            //    Notificar("Usuário não encontrato.");
-            //    return;
-            //}
             var usuario = await Obterfuncionariologado();
             var recurso = await _recursoRepository.ObterPorId(registroVotacao.RecursoId);
-            //var votaçaofuncionario = _registroVotacaoRepository.ObterVotoPorFuncionario(usuario.Id, recurso.Id).Result;
             if (VerificarUsuarioVoto(usuario.Id,recurso.Id))
             {
                 Notificar("Usuário já realizou votação nesse recurso.");
