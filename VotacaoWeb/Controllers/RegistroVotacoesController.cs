@@ -2,6 +2,7 @@
 using Business.Interfaces;
 using Business.Interfaces.IService;
 using Business.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -10,6 +11,7 @@ using VotacaoWeb.ViewModels;
 
 namespace VotacaoWeb.Controllers
 {
+    [Authorize]
     public class RegistroVotacoesController : BaseController
     {
         private readonly IRegistroVotacaoRepository _registroVotacaoRepository;
@@ -30,18 +32,16 @@ namespace VotacaoWeb.Controllers
             _recursoRepository = recursoRepository;
         }
 
-        // GET: RegistroVotacoes
         public ActionResult Index()
         {
             return View();
         }
 
-        // GET: RegistroVotacoes/Details/5
+        [AllowAnonymous]
         public ActionResult Details(int id)
         {
             return View();
         }
-        // GET: RegistroVotacoes/Create
         public async Task<IActionResult> Create(Guid id)
         {
             var recursoViewModel = await ObterRecursoPorId(id);
@@ -69,21 +69,17 @@ namespace VotacaoWeb.Controllers
             }
         }
 
-        // GET: RegistroVotacoes/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: RegistroVotacoes/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
         {
             try
             {
-                // TODO: Add update logic here
-
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -92,21 +88,17 @@ namespace VotacaoWeb.Controllers
             }
         }
 
-        // GET: RegistroVotacoes/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: RegistroVotacoes/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
         {
             try
             {
-                // TODO: Add delete logic here
-
                 return RedirectToAction(nameof(Index));
             }
             catch

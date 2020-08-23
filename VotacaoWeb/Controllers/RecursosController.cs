@@ -2,6 +2,7 @@
 using Business.Interfaces;
 using Business.Interfaces.IService;
 using Business.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,6 +13,7 @@ using X.PagedList;
 
 namespace VotacaoWeb.Controllers
 {
+    [Authorize]
     public class RecursosController : BaseController
     {
         private readonly IRecursoRepository _recursoRepository;
@@ -29,6 +31,7 @@ namespace VotacaoWeb.Controllers
             _recursoService = recursoService;
         }
 
+        [AllowAnonymous]
         [Route("lista-de-recursos")]
         public async Task<IActionResult> Index(int? pg)
         {
@@ -37,6 +40,7 @@ namespace VotacaoWeb.Controllers
             return View(query);
         }
 
+        [AllowAnonymous]
         public async Task<ActionResult> Details(Guid id)
         {
             var recursoViewModel = await ObterRecursoPorId(id);

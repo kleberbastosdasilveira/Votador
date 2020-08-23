@@ -30,25 +30,34 @@ namespace Business.Services
 
         public async Task Adicionar(RegistroVotacao registroVotacao)
         {
-            if (!ExecultarValidacao(new RegistroVotacaoValidation(), registroVotacao)) return;
-            var usuario = await Obterfuncionariologado();
-            var recurso = await _recursoRepository.ObterPorId(registroVotacao.RecursoId);
-            if (VerificarUsuarioVoto(usuario.Id,recurso.Id))
+            try
             {
-                Notificar("Usuário já realizou votação nesse recurso.");
-                return;
+                if (!ExecultarValidacao(new RegistroVotacaoValidation(), registroVotacao)) return;
+                var usuario = await Obterfuncionariologado();
+                var recurso = await _recursoRepository.ObterPorId(registroVotacao.RecursoId);
+                if (VerificarUsuarioVoto(usuario.Id, recurso.Id))
+                {
+                    Notificar("Usuário já realizou votação nesse recurso.");
+                    return;
+                }
+
+                recurso.NumeroVotacao = recurso.NumeroVotacao + 1;
+                var registro = new RegistroVotacao
+                {
+                    RecursoId = registroVotacao.RecursoId,
+                    ComentarioRecurso = registroVotacao.ComentarioRecurso,
+                    DataVotacaoRecurso = DateTime.Now,
+                    FuncionarioId = usuario.Id,
+                };
+                await _registroVotacaoRepository.Adicionar(registro);
+                await _recursoRepository.Atualizar(recurso);
+            }
+            catch (Exception e)
+            {
+                string erro = "Erro encontrado Entre em Contato com o nosso suporte";
+                Notificar(erro);
             }
 
-            recurso.NumeroVotacao = recurso.NumeroVotacao + 1;
-            var registro = new RegistroVotacao
-            {
-                RecursoId = registroVotacao.RecursoId,
-                ComentarioRecurso = registroVotacao.ComentarioRecurso,
-                DataVotacaoRecurso = DateTime.Now,
-                FuncionarioId = usuario.Id,
-            };
-            await _registroVotacaoRepository.Adicionar(registro);
-            await _recursoRepository.Atualizar(recurso);
         }
 
         public void Dispose()
@@ -57,24 +66,34 @@ namespace Business.Services
             _funcionarioRepository?.Dispose();
             _recursoRepository?.Dispose();
         }
-        private async Task<Funcionario> Obterfuncionariologado ()
+        private async Task<Funcionario> Obterfuncionariologado()
         {
-            var useridentitylogado = _httpContextAccessor.HttpContext.User.Identity.Name.ToString();
-            var usuariologado = await _funcionarioRepository.ObterFuncionarioLogado(useridentitylogado);
-            if (usuariologado == null)
+            try
             {
-                Notificar("Usuário não encontrato.");
+                var useridentitylogado = _httpContextAccessor.HttpContext.User.Identity.Name.ToString();
+                var usuariologado = await _funcionarioRepository.ObterFuncionarioLogado(useridentitylogado);
+                if (usuariologado == null)
+                {
+                    Notificar("Usuário não encontrato.");
+                    return null;
+                }
+                return usuariologado;
+            }
+            catch (Exception e)
+            {
+                string erro = "Erro encontrado Entre em Contato com o nosso suporte";
+                Notificar(erro);
                 return null;
             }
-            return usuariologado;
+
         }
-        private  bool  VerificarUsuarioVoto(Guid funcionario , Guid recurso)
+        private bool VerificarUsuarioVoto(Guid funcionario, Guid recurso)
         {
-            var votaçaofuncionario =  _registroVotacaoRepository.ObterVotoPorFuncionario(funcionario, recurso).Result;
+            var votaçaofuncionario = _registroVotacaoRepository.ObterVotoPorFuncionario(funcionario, recurso).Result;
             if (votaçaofuncionario != null)
             {
                 return true;
-            } 
+            }
             return false;
         }
     }
