@@ -10,7 +10,7 @@ using VotacaoWeb.ViewModels;
 
 namespace VotacaoWeb.Controllers
 {
-    public class RegistroVotacoesController : Controller
+    public class RegistroVotacoesController : BaseController
     {
         private readonly IRegistroVotacaoRepository _registroVotacaoRepository;
         private readonly IMapper _mapper;
@@ -21,7 +21,8 @@ namespace VotacaoWeb.Controllers
             IRegistroVotacaoRepository registroVotacaoRepository,
             IMapper mapper,
             IRegistroVotacaoService registroVotacaoService,
-            IRecursoRepository recursoRepository)
+            IRecursoRepository recursoRepository,
+            INotificador notificador) : base(notificador)
         {
             _mapper = mapper;
             _registroVotacaoRepository = registroVotacaoRepository;
@@ -58,6 +59,8 @@ namespace VotacaoWeb.Controllers
                 var registro = new RegistroVotacaoViewModel { RecursoId = id, ComentarioRecurso = registroVotacaoViewModel.ComentarioRecurso };
                 var recurso = _mapper.Map<RegistroVotacao>(registro);
                 await _registroVotacaoService.Adicionar(recurso);
+                if (!OperacaoValida()) return View(registroVotacaoViewModel);
+                TempData["Sucesso"] = "Votação Realizada com Sucesso!";
                 return RedirectToAction("Index", "Recursos");
             }
             catch

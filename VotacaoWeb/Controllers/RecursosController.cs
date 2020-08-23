@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Business.Interfaces;
+using Business.Interfaces.IService;
 using Business.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,14 +12,21 @@ using X.PagedList;
 
 namespace VotacaoWeb.Controllers
 {
-    public class RecursosController : Controller
+    public class RecursosController : BaseController
     {
         private readonly IRecursoRepository _recursoRepository;
         private readonly IMapper _mapper;
+        private readonly IRecursoService _recursoService;
 
-        public RecursosController(IRecursoRepository recursoRepository, IMapper mapper)
+        public RecursosController(
+            IRecursoRepository recursoRepository,
+            IMapper mapper,
+            INotificador notificador,
+            IRecursoService recursoService) : base(notificador)
         {
-            _recursoRepository = recursoRepository; _mapper = mapper;
+            _recursoRepository = recursoRepository;
+            _mapper = mapper;
+            _recursoService = recursoService;
         }
 
         [Route("lista-de-recursos")]
@@ -51,7 +59,11 @@ namespace VotacaoWeb.Controllers
             {
                 if (!ModelState.IsValid) return View(recursoViewModel);
                 var recurso = _mapper.Map<Recurso>(recursoViewModel);
-                await _recursoRepository.Adicionar(recurso);
+                await _recursoService.Adicionar(recurso);
+                if (!OperacaoValida()) return View(recursoViewModel);
+
+                TempData["Sucesso"] = "Recurso Cadastrado com Sucesso!";
+
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -78,8 +90,8 @@ namespace VotacaoWeb.Controllers
                 if (id != recursoViewModel.Id) return NotFound();
                 if (!ModelState.IsValid) return NotFound();
                 var recurso = _mapper.Map<Recurso>(recursoViewModel);
-                await _recursoRepository.Atualizar(recurso);
-
+                await _recursoService.Atualizar(recurso);
+                if (!OperacaoValida()) return View(await ObterRecursoPorId(id));
                 return RedirectToAction("Index");
             }
             catch
