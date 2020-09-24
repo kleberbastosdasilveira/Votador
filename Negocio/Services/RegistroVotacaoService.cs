@@ -57,7 +57,6 @@ namespace Business.Services
                 string erro = "Erro encontrado Entre em Contato com o nosso suporte";
                 Notificar(erro);
             }
-
         }
 
         public void Dispose()
@@ -66,6 +65,7 @@ namespace Business.Services
             _funcionarioRepository?.Dispose();
             _recursoRepository?.Dispose();
         }
+
         private async Task<Funcionario> Obterfuncionariologado()
         {
             try
@@ -85,8 +85,8 @@ namespace Business.Services
                 Notificar(erro);
                 return null;
             }
-
         }
+
         private bool VerificarUsuarioVoto(Guid funcionario, Guid recurso)
         {
             var votaçaofuncionario = _registroVotacaoRepository.ObterVotoPorFuncionario(funcionario, recurso).Result;

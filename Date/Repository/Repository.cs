@@ -1,5 +1,4 @@
 ﻿using Business.Interfaces;
-using Business.Models;
 using Date.Context;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -14,11 +13,11 @@ namespace Date.Repository
     {
         protected readonly MeuDbContext Db;
         protected readonly DbSet<TEntity> DbSet;
+
         public Repository(MeuDbContext db)
         {
             Db = db;
             DbSet = db.Set<TEntity>();
-
         }
 
         public async Task<IEnumerable<TEntity>> Buscar(Expression<Func<TEntity, bool>> predicate)

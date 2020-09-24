@@ -1,9 +1,6 @@
 ﻿using Business.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Date.Mappings
 {
@@ -27,7 +24,6 @@ namespace Date.Mappings
             builder.Property(r => r.ComentarioRecurso)
                 .IsRequired()
                 .HasColumnType("varchar(999)");
-
 
             builder.HasOne<Funcionario>(f => f.Funcionario)
                 .WithMany(r => r.RegistroVotacoes)

@@ -21,5 +21,4 @@ namespace VotacaoWeb.Configurations
             return app;
         }
     }
-
 }

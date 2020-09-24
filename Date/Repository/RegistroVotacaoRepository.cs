@@ -5,14 +5,15 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Date.Repository
 {
     public class RegistroVotacaoRepository : Repository<RegistroVotacao>, IRegistroVotacaoRepository
     {
-        public RegistroVotacaoRepository(MeuDbContext context) : base(context) { }
+        public RegistroVotacaoRepository(MeuDbContext context) : base(context)
+        {
+        }
 
         public async Task<RegistroVotacao> ObterVotacao(Guid funcionarioId, Guid recursoId)
         {

@@ -1,10 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace VotacaoWeb.ViewModels
 {
@@ -25,7 +22,6 @@ namespace VotacaoWeb.ViewModels
 
         [DisplayName("Quantidade de Voto")]
         public int NumeroVotacao { get; set; }
-
 
         public IEnumerable<RegistroVotacaoViewModel> RegistroVotacoes { get; set; }
     }

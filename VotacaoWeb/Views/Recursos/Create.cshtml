@@ -1,5 +1,4 @@
-﻿
-@model VotacaoWeb.ViewModels.RecursoViewModel
+﻿@model VotacaoWeb.ViewModels.RecursoViewModel
 
 @{
     ViewData["Title"] = "Criação de Recurso";
@@ -12,8 +11,6 @@
         <form asp-action="Create">
             @*<div asp-validation-summary="ModelOnly" class="text-danger"></div>*@
             <vc:notificacao></vc:notificacao>
-
-           
 
             <div class="form-group col-md-5">
                 <label asp-for="TituloRecurso" class="control-label"></label>
@@ -36,4 +33,3 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
-

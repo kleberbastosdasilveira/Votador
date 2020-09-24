@@ -13,7 +13,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using VotacaoWeb.ViewModels;
 
@@ -92,7 +91,7 @@ namespace VotacaoWeb.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
-                    var funcionario = new FuncionarioViewModel() { Email = Input.Email,Nome= Input.Nome_Completo,Senha = Input.Password };
+                    var funcionario = new FuncionarioViewModel() { Email = Input.Email, Nome = Input.Nome_Completo, Senha = Input.Password };
                     var recurso = _mapper.Map<Funcionario>(funcionario);
                     await _funcionarioRepository.Adicionar(recurso);
                     _logger.LogInformation("User created a new account with password.");
@@ -114,8 +113,8 @@ namespace VotacaoWeb.Areas.Identity.Pages.Account
                     //}
                     //else
                     //{
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    return LocalRedirect(returnUrl);
                     //}
                 }
                 foreach (var error in result.Errors)

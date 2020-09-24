@@ -8,10 +8,12 @@ namespace Business.Services
     public abstract class BaseService
     {
         private readonly INotificador _notificador;
+
         public BaseService(INotificador notificador)
         {
             _notificador = notificador;
         }
+
         protected void Notificar(ValidationResult validationResult)
         {
             foreach (var erro in validationResult.Errors)

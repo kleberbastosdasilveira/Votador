@@ -62,8 +62,7 @@ namespace VotacaoWeb.Controllers
             try
             {
                 if (!ModelState.IsValid) return View(recursoViewModel);
-                var recurso = _mapper.Map<Recurso>(recursoViewModel);
-                await _recursoService.Adicionar(recurso);
+                await _recursoService.Adicionar(_mapper.Map<Recurso>(recursoViewModel));
                 if (!OperacaoValida()) return View(recursoViewModel);
 
                 TempData["Sucesso"] = "Recurso Cadastrado com Sucesso!";
@@ -93,8 +92,7 @@ namespace VotacaoWeb.Controllers
             {
                 if (id != recursoViewModel.Id) return NotFound();
                 if (!ModelState.IsValid) return NotFound();
-                var recurso = _mapper.Map<Recurso>(recursoViewModel);
-                await _recursoService.Atualizar(recurso);
+                await _recursoService.Atualizar(_mapper.Map<Recurso>(recursoViewModel));
                 if (!OperacaoValida()) return View(await ObterRecursoPorId(id));
                 return RedirectToAction("Index");
             }

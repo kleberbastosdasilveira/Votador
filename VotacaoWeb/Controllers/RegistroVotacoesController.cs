@@ -42,6 +42,7 @@ namespace VotacaoWeb.Controllers
         {
             return View();
         }
+
         public async Task<IActionResult> Create(Guid id)
         {
             var recursoViewModel = await ObterRecursoPorId(id);

@@ -10,6 +10,7 @@ namespace Date.Security
         {
             return Encrypt(Constant.SecurityCardDataCryptographyKey, data);
         }
+
         protected string Encrypt(string key, string data)
         {
             byte[] keyArray;
