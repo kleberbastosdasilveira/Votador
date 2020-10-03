@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using VotacaoAPI.Cofigurations;
+using VotacaoAPI.Configurations;
 
 namespace VotacaoAPI
 {
@@ -24,7 +25,8 @@ namespace VotacaoAPI
             services.AddDbContext<MeuDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
             services.ResolveDependencies();
             services.AddControllers();
-            services.Configure<ApiBehaviorOptions>(options =>{options.SuppressModelStateInvalidFilter = true;});
+            services.AddIdentityConfig(Configuration);
+            services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -37,13 +39,12 @@ namespace VotacaoAPI
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+             {
+                  endpoints.MapControllers();
+             });
         }
     }
 }

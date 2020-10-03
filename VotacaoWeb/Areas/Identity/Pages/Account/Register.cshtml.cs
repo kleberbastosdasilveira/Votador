@@ -87,7 +87,7 @@ namespace VotacaoWeb.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, NomeCompleto = Input.Nome_Completo };
+                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, NomeCompleto = Input.Nome_Completo, EmailConfirmed = true };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {

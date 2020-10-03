@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Security\**" />
+    <EmbeddedResource Remove="Security\**" />
+    <None Remove="Security\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Migrations\20200730105301_Inicial.cs" />
     <Compile Remove="Migrations\20200730105301_Inicial.Designer.cs" />
   </ItemGroup>

@@ -2,6 +2,7 @@
 using Business.Interfaces;
 using Business.Interfaces.IService;
 using Business.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using VotacaoAPI.ViewModels;
 
 namespace VotacaoAPI.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class RecursosController : MainController
     {
@@ -26,7 +28,7 @@ namespace VotacaoAPI.Controllers
             _recursoRepository = recursoRepository;
             _recursoService = recursoService;
         }
-
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IEnumerable<RecursoViewModel>> ObterTodosRecurso()
         {
@@ -41,6 +43,7 @@ namespace VotacaoAPI.Controllers
             if (recurso == null) return NotFound();
             return recurso;
         }
+
         [HttpPost]
         public async Task<ActionResult<RecursoViewModel>> AdicionarRecurso(RecursoViewModel recursoViewModel)
         {
@@ -48,10 +51,11 @@ namespace VotacaoAPI.Controllers
             await _recursoService.Adicionar(_mapper.Map<Recurso>(recursoViewModel));
             return CustomeResponse(recursoViewModel);
         }
+
         [HttpPut("{id:guid}")]
-        public async Task<ActionResult<RecursoViewModel>>AtualizarRecurso(Guid id,RecursoViewModel recursoViewModel)
+        public async Task<ActionResult<RecursoViewModel>> AtualizarRecurso(Guid id, RecursoViewModel recursoViewModel)
         {
-            if(id!=recursoViewModel.Id )
+            if (id != recursoViewModel.Id)
             {
                 NotificarErro("O id informado não é o mesmo que foi passado na query");
                 return CustomeResponse(recursoViewModel);

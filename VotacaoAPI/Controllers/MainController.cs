@@ -10,6 +10,7 @@ namespace VotacaoAPI.Controllers
     public abstract class MainController : Controller
     {
         private readonly INotificador _notificador;
+
         public MainController(INotificador notificador)
         {
             _notificador = notificador;
@@ -19,20 +20,21 @@ namespace VotacaoAPI.Controllers
         {
             return !_notificador.TemNotificacao();
         }
-        protected ActionResult CustomeResponse (object result = null)
+
+        protected ActionResult CustomeResponse(object result = null)
         {
-            if(OperacaoValida())
+            if (OperacaoValida())
             {
                 return Ok(new
                 {
                     success = true,
-                    data = result                
+                    data = result
                 });
             }
-            return BadRequest(new 
+            return BadRequest(new
             {
                 sucesse = false,
-                erros =_notificador.ObterNotificacoes().Select(m=>m.Mensagem)
+                erros = _notificador.ObterNotificacoes().Select(m => m.Mensagem)
             });
         }
 
@@ -41,7 +43,8 @@ namespace VotacaoAPI.Controllers
             if (!modelState.IsValid) NotificarErroModelInvalida(modelState);
             return CustomeResponse();
         }
-        protected void NotificarErroModelInvalida (ModelStateDictionary modelState)
+
+        protected void NotificarErroModelInvalida(ModelStateDictionary modelState)
         {
             var erros = modelState.Values.SelectMany(e => e.Errors);
             foreach (var erro in erros)
@@ -50,7 +53,8 @@ namespace VotacaoAPI.Controllers
                 NotificarErro(erroMsg);
             }
         }
-        protected void NotificarErro (string msg)
+
+        protected void NotificarErro(string msg)
         {
             _notificador.Handle(new Notificacao(msg));
         }
